@@ -139,8 +139,9 @@ export default class Accordion extends Component {
                 activeSections.includes(concatKey),
                 sections
               )}
-          </View>
-        ))}
+            </View>
+          );
+        )}
       </View>
     );
   }
