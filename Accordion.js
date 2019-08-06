@@ -9,12 +9,16 @@ const VIEW_PROPS = Object.keys(ViewPropTypes);
 
 export default class Accordion extends Component {
   static propTypes = {
+    loopIndex: PropTypes.number,
     sections: PropTypes.array.isRequired,
     renderHeader: PropTypes.func.isRequired,
     renderContent: PropTypes.func.isRequired,
     renderFooter: PropTypes.func,
     renderSectionTitle: PropTypes.func,
-    activeSections: PropTypes.arrayOf(PropTypes.number).isRequired,
+    activeSections: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.number),
+      PropTypes.arrayOf(PropTypes.string)
+    ]).isRequired,
     onChange: PropTypes.func.isRequired,
     align: PropTypes.oneOf(['top', 'center', 'bottom']),
     duration: PropTypes.number,
@@ -72,6 +76,7 @@ export default class Accordion extends Component {
     });
 
     const {
+      loopIndex,
       activeSections,
       containerStyle,
       sectionContainerStyle,
@@ -99,32 +104,39 @@ export default class Accordion extends Component {
 
     return (
       <View style={containerStyle} {...viewProps}>
-        {sections.map((section, key) => (
-          <View key={key} style={sectionContainerStyle}>
-            {renderSectionTitle(section, key, activeSections.includes(key))}
+        {sections.map((section, key) => {
+          const concatKey = loopIndex ? loopIndex + '_' + key : key;
 
-            {expandFromBottom && renderCollapsible(section, key)}
+          return (
+            <View key={concatKey} style={sectionContainerStyle}>
+              {renderSectionTitle(
+                section,
+                concatKey,
+                activeSections.includes(concatKey)
+              )}
+
+            {expandFromBottom && renderCollapsible(section, concatKey)}
 
             <Touchable
-              onPress={() => this._toggleSection(key)}
+              onPress={() => this._toggleSection(concatKey)}
               underlayColor={underlayColor}
               {...touchableProps}
             >
               {renderHeader(
                 section,
-                key,
-                activeSections.includes(key),
+                concatKey,
+                activeSections.includes(concatKey),
                 sections
               )}
             </Touchable>
 
-            {!expandFromBottom && renderCollapsible(section, key)}
+            {!expandFromBottom && renderCollapsible(section, concatKey)}
 
             {renderFooter &&
               renderFooter(
                 section,
-                key,
-                activeSections.includes(key),
+                concatKey,
+                activeSections.includes(concatKey),
                 sections
               )}
           </View>
