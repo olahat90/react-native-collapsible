@@ -115,34 +115,34 @@ export default class Accordion extends Component {
                 activeSections.includes(concatKey)
               )}
 
-            {expandFromBottom && renderCollapsible(section, concatKey)}
+              {expandFromBottom && renderCollapsible(section, concatKey)}
 
-            <Touchable
-              onPress={() => this._toggleSection(concatKey)}
-              underlayColor={underlayColor}
-              {...touchableProps}
-            >
-              {renderHeader(
-                section,
-                concatKey,
-                activeSections.includes(concatKey),
-                sections
-              )}
-            </Touchable>
+              <Touchable
+                onPress={() => this._toggleSection(concatKey)}
+                underlayColor={underlayColor}
+                {...touchableProps}
+              >
+                {renderHeader(
+                  section,
+                  concatKey,
+                  activeSections.includes(concatKey),
+                  sections
+                )}
+              </Touchable>
 
-            {!expandFromBottom && renderCollapsible(section, concatKey)}
+              {!expandFromBottom && renderCollapsible(section, concatKey)}
 
-            {renderFooter &&
-              renderFooter(
-                section,
-                concatKey,
-                activeSections.includes(concatKey),
-                sections
-              )}
+              {renderFooter &&
+                renderFooter(
+                  section,
+                  concatKey,
+                  activeSections.includes(concatKey),
+                  sections
+                )}
             </View>
           );
-        )}
-      </View>
+        })}
+    </View>
     );
   }
 }
