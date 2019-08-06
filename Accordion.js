@@ -13,6 +13,7 @@ export default class Accordion extends Component {
     sections: PropTypes.array.isRequired,
     renderHeader: PropTypes.func.isRequired,
     renderContent: PropTypes.func.isRequired,
+    renderFooter: PropTypes.func,
     renderSectionTitle: PropTypes.func,
     activeSections: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.number),
@@ -87,6 +88,7 @@ export default class Accordion extends Component {
       onAnimationEnd,
       renderContent,
       renderHeader,
+      renderFooter,
       renderSectionTitle,
     } = this.props;
 
@@ -113,25 +115,32 @@ export default class Accordion extends Component {
                 activeSections.includes(concatKey)
               )}
 
-              {expandFromBottom && renderCollapsible(section, concatKey)}
+            {expandFromBottom && renderCollapsible(section, concatKey)}
 
-              <Touchable
-                onPress={() => this._toggleSection(concatKey)}
-                underlayColor={underlayColor}
-                {...touchableProps}
-              >
-                {renderHeader(
-                  section,
-                  concatKey,
-                  activeSections.includes(concatKey),
-                  sections
-                )}
-              </Touchable>
+            <Touchable
+              onPress={() => this._toggleSection(concatKey)}
+              underlayColor={underlayColor}
+              {...touchableProps}
+            >
+              {renderHeader(
+                section,
+                concatKey,
+                activeSections.includes(concatKey),
+                sections
+              )}
+            </Touchable>
 
-              {!expandFromBottom && renderCollapsible(section, concatKey)}
-            </View>
-          );
-        })}
+            {!expandFromBottom && renderCollapsible(section, concatKey)}
+
+            {renderFooter &&
+              renderFooter(
+                section,
+                concatKey,
+                activeSections.includes(concatKey),
+                sections
+              )}
+          </View>
+        ))}
       </View>
     );
   }
